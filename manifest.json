@@ -1,0 +1,11 @@
+{
+  "name": "Physics Unit Converter",
+  "short_name": "Physics Converter",
+  "description": "Offline Physics Unit Converter",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#f2f2f2",
+  "theme_color": "#007bff",
+  "orientation": "portrait",
+  "icons": []
+}
