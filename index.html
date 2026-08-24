@@ -1,16 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Physics Unit Converter</title>
 
     <style>
         body {
             font-family: Arial, sans-serif;
-            background: #eef2f7;
-            margin: 0;
+            text-align: center;
+            background: #f2f2f2;
             padding: 20px;
         }
 
@@ -20,50 +17,30 @@
             background: white;
             padding: 25px;
             border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
         }
 
         h1 {
-            text-align: center;
             color: #222;
         }
 
-        label {
-            display: block;
-            margin-top: 15px;
-            font-weight: bold;
-        }
-
-        input, select, button {
-            width: 100%;
+        select, input, button {
+            width: 90%;
             padding: 12px;
-            margin-top: 8px;
-            box-sizing: border-box;
+            margin: 10px;
             font-size: 16px;
-            border-radius: 8px;
-            border: 1px solid #ccc;
         }
 
         button {
-            background: #1976d2;
+            background: #007bff;
             color: white;
             border: none;
-            cursor: pointer;
-            margin-top: 20px;
-        }
-
-        button:hover {
-            background: #125aa0;
+            border-radius: 8px;
         }
 
         #result {
-            margin-top: 20px;
-            padding: 15px;
-            background: #e8f5e9;
-            border-radius: 8px;
-            text-align: center;
-            font-size: 18px;
+            font-size: 20px;
             font-weight: bold;
+            margin-top: 20px;
         }
     </style>
 </head>
@@ -74,31 +51,28 @@
 
     <h1>⚛️ Physics Unit Converter</h1>
 
-    <label>Select Category</label>
-
     <select id="category" onchange="loadUnits()">
+        <option value="">Select Category</option>
         <option value="length">Length</option>
         <option value="mass">Mass</option>
         <option value="time">Time</option>
+        <option value="temperature">Temperature</option>
+        <option value="velocity">Velocity</option>
+        <option value="force">Force</option>
+        <option value="energy">Energy</option>
+        <option value="power">Power</option>
+        <option value="pressure">Pressure</option>
     </select>
-
-    <label>Enter Value</label>
 
     <input type="number" id="value" placeholder="Enter value">
 
-    <label>From Unit</label>
-
     <select id="fromUnit"></select>
-
-    <label>To Unit</label>
 
     <select id="toUnit"></select>
 
     <button onclick="convert()">Convert</button>
 
-    <div id="result">
-        Result will appear here
-    </div>
+    <div id="result"></div>
 
 </div>
 
@@ -107,129 +81,151 @@
 const units = {
 
     length: {
-        m: 1,
-        cm: 0.01,
-        mm: 0.001,
-        km: 1000,
-        nm: 0.000000001,
-        um: 0.000001
+        meter: 1,
+        kilometer: 1000,
+        centimeter: 0.01,
+        millimeter: 0.001,
+        micrometer: 0.000001,
+        nanometer: 0.000000001
     },
 
     mass: {
-        kg: 1,
-        g: 0.001,
-        mg: 0.000001,
-        ug: 0.000000001
+        kilogram: 1,
+        gram: 0.001,
+        milligram: 0.000001
     },
 
     time: {
-        s: 1,
-        ms: 0.001,
-        min: 60,
+        second: 1,
+        minute: 60,
         hour: 3600,
         day: 86400
+    },
+
+    velocity: {
+        "m/s": 1,
+        "km/h": 0.2777778
+    },
+
+    force: {
+        newton: 1,
+        kilonewton: 1000
+    },
+
+    energy: {
+        joule: 1,
+        kilojoule: 1000,
+        calorie: 4.184
+    },
+
+    power: {
+        watt: 1,
+        kilowatt: 1000,
+        megawatt: 1000000
+    },
+
+    pressure: {
+        pascal: 1,
+        kilopascal: 1000,
+        megapascal: 1000000
     }
 
 };
-
-
-const unitNames = {
-
-    length: {
-        m: "Meter (m)",
-        cm: "Centimeter (cm)",
-        mm: "Millimeter (mm)",
-        km: "Kilometer (km)",
-        nm: "Nanometer (nm)",
-        um: "Micrometer (µm)"
-    },
-
-    mass: {
-        kg: "Kilogram (kg)",
-        g: "Gram (g)",
-        mg: "Milligram (mg)",
-        ug: "Microgram (µg)"
-    },
-
-    time: {
-        s: "Second (s)",
-        ms: "Millisecond (ms)",
-        min: "Minute (min)",
-        hour: "Hour (h)",
-        day: "Day"
-    }
-
-};
-
 
 function loadUnits() {
 
-    let category = document.getElementById("category").value;
+    const category = document.getElementById("category").value;
 
-    let fromUnit = document.getElementById("fromUnit");
-    let toUnit = document.getElementById("toUnit");
+    const from = document.getElementById("fromUnit");
+    const to = document.getElementById("toUnit");
 
-    fromUnit.innerHTML = "";
-    toUnit.innerHTML = "";
+    from.innerHTML = "";
+    to.innerHTML = "";
 
-    for (let unit in units[category]) {
+    if (category === "temperature") {
 
-        let option1 = document.createElement("option");
-        option1.value = unit;
-        option1.textContent = unitNames[category][unit];
+        addOption(from, "Celsius");
+        addOption(from, "Fahrenheit");
+        addOption(from, "Kelvin");
 
-        let option2 = document.createElement("option");
-        option2.value = unit;
-        option2.textContent = unitNames[category][unit];
-
-        fromUnit.appendChild(option1);
-        toUnit.appendChild(option2);
-    }
-}
-
-
-function convert() {
-
-    let value = parseFloat(
-        document.getElementById("value").value
-    );
-
-    let category = document.getElementById("category").value;
-
-    let from = document.getElementById("fromUnit").value;
-
-    let to = document.getElementById("toUnit").value;
-
-    if (isNaN(value)) {
-
-        document.getElementById("result").innerHTML =
-            "⚠️ Please enter a value.";
+        addOption(to, "Celsius");
+        addOption(to, "Fahrenheit");
+        addOption(to, "Kelvin");
 
         return;
     }
 
-    // Convert to base unit
+    if (!units[category]) return;
 
-    let baseValue = value * units[category][from];
-
-    // Convert to target unit
-
-    let result = baseValue / units[category][to];
-
-    document.getElementById("result").innerHTML =
-        value + " " +
-        unitNames[category][from] +
-        " = " +
-        result + " " +
-        unitNames[category][to];
+    for (let unit in units[category]) {
+        addOption(from, unit);
+        addOption(to, unit);
+    }
 }
 
+function addOption(select, text) {
 
-// Load units when page opens
+    const option = document.createElement("option");
 
-loadUnits();
+    option.value = text;
+    option.textContent = text;
+
+    select.appendChild(option);
+}
+
+function convert() {
+
+    const category = document.getElementById("category").value;
+    const value = parseFloat(document.getElementById("value").value);
+
+    const from = document.getElementById("fromUnit").value;
+    const to = document.getElementById("toUnit").value;
+
+    if (isNaN(value)) {
+        document.getElementById("result").innerHTML =
+        "Please enter a value.";
+        return;
+    }
+
+    let result;
+
+    if (category === "temperature") {
+
+        let celsius;
+
+        if (from === "Celsius") {
+            celsius = value;
+        } 
+        else if (from === "Fahrenheit") {
+            celsius = (value - 32) * 5 / 9;
+        } 
+        else if (from === "Kelvin") {
+            celsius = value - 273.15;
+        }
+
+        if (to === "Celsius") {
+            result = celsius;
+        } 
+        else if (to === "Fahrenheit") {
+            result = (celsius * 9 / 5) + 32;
+        } 
+        else if (to === "Kelvin") {
+            result = celsius + 273.15;
+        }
+
+    } else {
+
+        const baseValue = value * units[category][from];
+
+        result = baseValue / units[category][to];
+    }
+
+    document.getElementById("result").innerHTML =
+        "Result = " + result;
+}
 
 </script>
 
 </body>
 </html>
+STEP 4 — Save करें
