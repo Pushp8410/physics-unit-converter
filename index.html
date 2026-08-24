@@ -87,7 +87,7 @@
 
 <script>
 
-const units = {
+const units = {const units = {
 
     length: {
         meter: 1,
@@ -116,6 +116,12 @@ const units = {
         "km/h": 0.2777778
     },
 
+    acceleration: {
+        "m/s²": 1,
+        "km/s²": 1000,
+        "cm/s²": 0.01
+    },
+
     force: {
         newton: 1,
         kilonewton: 1000
@@ -133,10 +139,10 @@ const units = {
         megawatt: 1000000
     },
 
-    pressure: {    acceleration: {
-        "m/s²": 1,
-        "km/s²": 1000,
-        "cm/s²": 0.01
+    pressure: {
+        pascal: 1,
+        kilopascal: 1000,
+        megapascal: 1000000
     },
 
     density: {
@@ -192,107 +198,7 @@ const units = {
         "kg·m/s": 1,
         "g·cm/s": 0.00001
     }
-        pascal: 1,
-        kilopascal: 1000,
-        megapascal: 1000000
-    }
 
 };
 
-function loadUnits() {
-
-    const category = document.getElementById("category").value;
-
-    const from = document.getElementById("fromUnit");
-    const to = document.getElementById("toUnit");
-
-    from.innerHTML = "";
-    to.innerHTML = "";
-
-    if (category === "temperature") {
-
-        addOption(from, "Celsius");
-        addOption(from, "Fahrenheit");
-        addOption(from, "Kelvin");
-
-        addOption(to, "Celsius");
-        addOption(to, "Fahrenheit");
-        addOption(to, "Kelvin");
-
-        return;
-    }
-
-    if (!units[category]) return;
-
-    for (let unit in units[category]) {
-        addOption(from, unit);
-        addOption(to, unit);
-    }
-}
-
-function addOption(select, text) {
-
-    const option = document.createElement("option");
-
-    option.value = text;
-    option.textContent = text;
-
-    select.appendChild(option);
-}
-
-function convert() {
-
-    const category = document.getElementById("category").value;
-    const value = parseFloat(document.getElementById("value").value);
-
-    const from = document.getElementById("fromUnit").value;
-    const to = document.getElementById("toUnit").value;
-
-    if (isNaN(value)) {
-        document.getElementById("result").innerHTML =
-        "Please enter a value.";
-        return;
-    }
-
-    let result;
-
-    if (category === "temperature") {
-
-        let celsius;
-
-        if (from === "Celsius") {
-            celsius = value;
-        } 
-        else if (from === "Fahrenheit") {
-            celsius = (value - 32) * 5 / 9;
-        } 
-        else if (from === "Kelvin") {
-            celsius = value - 273.15;
-        }
-
-        if (to === "Celsius") {
-            result = celsius;
-        } 
-        else if (to === "Fahrenheit") {
-            result = (celsius * 9 / 5) + 32;
-        } 
-        else if (to === "Kelvin") {
-            result = celsius + 273.15;
-        }
-
-    } else {
-
-        const baseValue = value * units[category][from];
-
-        result = baseValue / units[category][to];
-    }
-
-    document.getElementById("result").innerHTML =
-        "Result = " + result;
-}
-
-</script>
-
-</body>
-</html>
-
+   
