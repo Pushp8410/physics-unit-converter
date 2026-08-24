@@ -225,12 +225,14 @@ function loadUnits() {
         return;
     }
 
-    if (!units[category]) return;
+    if (!units[category]) {
+    return;
+}
 
-    for (let unit in units[category]) {
-        addOption(from, unit);
-        addOption(to, unit);
-    }
+Object.keys(units[category]).forEach(function(unit) {
+    addOption(from, unit);
+    addOption(to, unit);
+});
 }
 
 function addOption(select, text) {
