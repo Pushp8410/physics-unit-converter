@@ -61,7 +61,16 @@
         <option value="force">Force</option>
         <option value="energy">Energy</option>
         <option value="power">Power</option>
-        <option value="pressure">Pressure</option>
+        <option value="pressure">Pressure</option><option value="acceleration">Acceleration</option>
+<option value="density">Density</option>
+<option value="voltage">Voltage</option>
+<option value="current">Current</option>
+<option value="resistance">Resistance</option>
+<option value="frequency">Frequency</option>
+<option value="charge">Electric Charge</option>
+<option value="area">Area</option>
+<option value="volume">Volume</option>
+<option value="momentum">Momentum</option>
     </select>
 
     <input type="number" id="value" placeholder="Enter value">
@@ -124,7 +133,65 @@ const units = {
         megawatt: 1000000
     },
 
-    pressure: {
+    pressure: {    acceleration: {
+        "m/s²": 1,
+        "km/s²": 1000,
+        "cm/s²": 0.01
+    },
+
+    density: {
+        "kg/m³": 1,
+        "g/cm³": 1000,
+        "kg/L": 1000
+    },
+
+    voltage: {
+        volt: 1,
+        millivolt: 0.001,
+        kilovolt: 1000
+    },
+
+    current: {
+        ampere: 1,
+        milliampere: 0.001,
+        microampere: 0.000001
+    },
+
+    resistance: {
+        ohm: 1,
+        kiloohm: 1000,
+        megaohm: 1000000
+    },
+
+    frequency: {
+        hertz: 1,
+        kilohertz: 1000,
+        megahertz: 1000000
+    },
+
+    charge: {
+        coulomb: 1,
+        millicoulomb: 0.001,
+        microcoulomb: 0.000001
+    },
+
+    area: {
+        "m²": 1,
+        "cm²": 0.0001,
+        "km²": 1000000
+    },
+
+    volume: {
+        "m³": 1,
+        liter: 0.001,
+        milliliter: 0.000001,
+        "cm³": 0.000001
+    },
+
+    momentum: {
+        "kg·m/s": 1,
+        "g·cm/s": 0.00001
+    }
         pascal: 1,
         kilopascal: 1000,
         megapascal: 1000000
