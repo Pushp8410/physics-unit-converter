@@ -3,12 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Physics Unit Converter</title>
 
     <style>
         body {
             font-family: Arial, sans-serif;
-            background: #f2f2f2;
+            background: #eef2f7;
             margin: 0;
             padding: 20px;
         }
@@ -39,13 +40,14 @@
             margin-top: 8px;
             box-sizing: border-box;
             font-size: 16px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
         }
 
         button {
             background: #1976d2;
             color: white;
             border: none;
-            border-radius: 8px;
             cursor: pointer;
             margin-top: 20px;
         }
@@ -70,30 +72,27 @@
 
 <div class="container">
 
-    <h1>Physics Unit Converter</h1>
+    <h1>⚛️ Physics Unit Converter</h1>
+
+    <label>Select Category</label>
+
+    <select id="category" onchange="loadUnits()">
+        <option value="length">Length</option>
+        <option value="mass">Mass</option>
+        <option value="time">Time</option>
+    </select>
 
     <label>Enter Value</label>
+
     <input type="number" id="value" placeholder="Enter value">
 
     <label>From Unit</label>
-    <select id="fromUnit">
-        <option value="m">Meter (m)</option>
-        <option value="cm">Centimeter (cm)</option>
-        <option value="mm">Millimeter (mm)</option>
-        <option value="km">Kilometer (km)</option>
-        <option value="nm">Nanometer (nm)</option>
-        <option value="um">Micrometer (µm)</option>
-    </select>
+
+    <select id="fromUnit"></select>
 
     <label>To Unit</label>
-    <select id="toUnit">
-        <option value="m">Meter (m)</option>
-        <option value="cm">Centimeter (cm)</option>
-        <option value="mm">Millimeter (mm)</option>
-        <option value="km">Kilometer (km)</option>
-        <option value="nm">Nanometer (nm)</option>
-        <option value="um">Micrometer (µm)</option>
-    </select>
+
+    <select id="toUnit"></select>
 
     <button onclick="convert()">Convert</button>
 
@@ -105,65 +104,130 @@
 
 <script>
 
+const units = {
+
+    length: {
+        m: 1,
+        cm: 0.01,
+        mm: 0.001,
+        km: 1000,
+        nm: 0.000000001,
+        um: 0.000001
+    },
+
+    mass: {
+        kg: 1,
+        g: 0.001,
+        mg: 0.000001,
+        ug: 0.000000001
+    },
+
+    time: {
+        s: 1,
+        ms: 0.001,
+        min: 60,
+        hour: 3600,
+        day: 86400
+    }
+
+};
+
+
+const unitNames = {
+
+    length: {
+        m: "Meter (m)",
+        cm: "Centimeter (cm)",
+        mm: "Millimeter (mm)",
+        km: "Kilometer (km)",
+        nm: "Nanometer (nm)",
+        um: "Micrometer (µm)"
+    },
+
+    mass: {
+        kg: "Kilogram (kg)",
+        g: "Gram (g)",
+        mg: "Milligram (mg)",
+        ug: "Microgram (µg)"
+    },
+
+    time: {
+        s: "Second (s)",
+        ms: "Millisecond (ms)",
+        min: "Minute (min)",
+        hour: "Hour (h)",
+        day: "Day"
+    }
+
+};
+
+
+function loadUnits() {
+
+    let category = document.getElementById("category").value;
+
+    let fromUnit = document.getElementById("fromUnit");
+    let toUnit = document.getElementById("toUnit");
+
+    fromUnit.innerHTML = "";
+    toUnit.innerHTML = "";
+
+    for (let unit in units[category]) {
+
+        let option1 = document.createElement("option");
+        option1.value = unit;
+        option1.textContent = unitNames[category][unit];
+
+        let option2 = document.createElement("option");
+        option2.value = unit;
+        option2.textContent = unitNames[category][unit];
+
+        fromUnit.appendChild(option1);
+        toUnit.appendChild(option2);
+    }
+}
+
+
 function convert() {
 
-    let value = parseFloat(document.getElementById("value").value);
+    let value = parseFloat(
+        document.getElementById("value").value
+    );
+
+    let category = document.getElementById("category").value;
+
     let from = document.getElementById("fromUnit").value;
+
     let to = document.getElementById("toUnit").value;
 
     if (isNaN(value)) {
+
         document.getElementById("result").innerHTML =
-            "Please enter a value.";
+            "⚠️ Please enter a value.";
+
         return;
     }
 
-    // Convert everything to meters
-    let inMeters = 0;
+    // Convert to base unit
 
-    if (from === "m") {
-        inMeters = value;
-    } 
-    else if (from === "cm") {
-        inMeters = value / 100;
-    } 
-    else if (from === "mm") {
-        inMeters = value / 1000;
-    } 
-    else if (from === "km") {
-        inMeters = value * 1000;
-    } 
-    else if (from === "nm") {
-        inMeters = value / 1000000000;
-    } 
-    else if (from === "um") {
-        inMeters = value / 1000000;
-    }
+    let baseValue = value * units[category][from];
 
-    // Convert meters to selected unit
-    let result = 0;
+    // Convert to target unit
 
-    if (to === "m") {
-        result = inMeters;
-    } 
-    else if (to === "cm") {
-        result = inMeters * 100;
-    } 
-    else if (to === "mm") {
-        result = inMeters * 1000;
-    } 
-    else if (to === "km") {
-        result = inMeters / 1000;
-    } 
-    else if (to === "nm") {
-        result = inMeters * 1000000000;
-    } 
-    else if (to === "um") {
-        result = inMeters * 1000000;
-    }
+    let result = baseValue / units[category][to];
 
     document.getElementById("result").innerHTML =
-        value + " " + from + " = " + result + " " + to;
+        value + " " +
+        unitNames[category][from] +
+        " = " +
+        result + " " +
+        unitNames[category][to];
 }
+
+
+// Load units when page opens
+
+loadUnits();
 
 </script>
 
