@@ -58,19 +58,20 @@
         <option value="time">Time</option>
         <option value="temperature">Temperature</option>
         <option value="velocity">Velocity</option>
+        <option value="acceleration">Acceleration</option>
         <option value="force">Force</option>
         <option value="energy">Energy</option>
         <option value="power">Power</option>
-        <option value="pressure">Pressure</option><option value="acceleration">Acceleration</option>
-<option value="density">Density</option>
-<option value="voltage">Voltage</option>
-<option value="current">Current</option>
-<option value="resistance">Resistance</option>
-<option value="frequency">Frequency</option>
-<option value="charge">Electric Charge</option>
-<option value="area">Area</option>
-<option value="volume">Volume</option>
-<option value="momentum">Momentum</option>
+        <option value="pressure">Pressure</option>
+        <option value="density">Density</option>
+        <option value="voltage">Voltage</option>
+        <option value="current">Current</option>
+        <option value="resistance">Resistance</option>
+        <option value="frequency">Frequency</option>
+        <option value="charge">Electric Charge</option>
+        <option value="area">Area</option>
+        <option value="volume">Volume</option>
+        <option value="momentum">Momentum</option>
     </select>
 
     <input type="number" id="value" placeholder="Enter value">
@@ -87,7 +88,7 @@
 
 <script>
 
-const units =  {
+const units = {
 
     length: {
         meter: 1,
@@ -200,7 +201,8 @@ const units =  {
     }
 
 };
-    function loadUnits() {
+
+function loadUnits() {
 
     const category = document.getElementById("category").value;
 
@@ -292,15 +294,16 @@ function convert() {
 
     } else {
 
-        const baseValue =
-            value * units[category][from];
+        const baseValue = value * units[category][from];
 
-        result =
-            baseValue / units[category][to];
+        result = baseValue / units[category][to];
     }
 
     document.getElementById("result").innerHTML =
         "Result = " + result;
 }
 
-   
+</script>
+
+</body>
+</html>
