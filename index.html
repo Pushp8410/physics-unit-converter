@@ -28,6 +28,7 @@
             padding: 12px;
             margin: 10px;
             font-size: 16px;
+            box-sizing: border-box;
         }
 
         button {
@@ -35,12 +36,18 @@
             color: white;
             border: none;
             border-radius: 8px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #0056b3;
         }
 
         #result {
             font-size: 20px;
             font-weight: bold;
             margin-top: 20px;
+            word-wrap: break-word;
         }
     </style>
 </head>
@@ -52,7 +59,9 @@
     <h1>⚛️ Physics Unit Converter</h1>
 
     <select id="category" onchange="loadUnits()">
+
         <option value="">Select Category</option>
+
         <option value="length">Length</option>
         <option value="mass">Mass</option>
         <option value="time">Time</option>
@@ -72,9 +81,17 @@
         <option value="area">Area</option>
         <option value="volume">Volume</option>
         <option value="momentum">Momentum</option>
+
+        <!-- NEW -->
+        <option value="magnetic">🧲 Magnetic Quantities (SI ↔ CGS)</option>
+
     </select>
 
-    <input type="number" id="value" placeholder="Enter value">
+    <input
+        type="number"
+        id="value"
+        placeholder="Enter value"
+    >
 
     <select id="fromUnit"></select>
 
@@ -124,24 +141,24 @@ const units = {
     },
 
     force: {
-    newton: 1,
-    kilonewton: 1000,
-    meganewton: 1000000,
-    dyne: 0.00001,
-    pound_force: 4.448221615
-},
+        newton: 1,
+        kilonewton: 1000,
+        meganewton: 1000000,
+        dyne: 0.00001,
+        pound_force: 4.448221615
+    },
 
-   energy: {
-    joule: 1,
-    kilojoule: 1000,
-    calorie: 4.184,
-    kilocalorie: 4184,
-    erg: 0.0000001,
-    eV: 1.602176634e-19,
-    keV: 1.602176634e-16,
-    MeV: 1.602176634e-13,
-    GeV: 1.602176634e-10
-},
+    energy: {
+        joule: 1,
+        kilojoule: 1000,
+        calorie: 4.184,
+        kilocalorie: 4184,
+        erg: 0.0000001,
+        eV: 1.602176634e-19,
+        keV: 1.602176634e-16,
+        MeV: 1.602176634e-13,
+        GeV: 1.602176634e-10
+    },
 
     power: {
         watt: 1,
@@ -207,16 +224,149 @@ const units = {
     momentum: {
         "kg·m/s": 1,
         "g·cm/s": 0.00001
+    },
+
+    /* =====================================
+       MAGNETIC QUANTITIES
+       SI ↔ CGS
+       ===================================== */
+
+    magnetic: {
+
+        /* Magnetic induction
+           1 T = 10^4 G
+        */
+        "Magnetic Induction — Tesla (T)": 1,
+        "Magnetic Induction — Gauss (G)": 0.0001,
+
+        /* Magnetic field
+           1 A/m = 4π × 10^-3 Oe
+        */
+        "Magnetic Field — A/m": 1,
+        "Magnetic Field — Oersted (Oe)": 1000 / (4 * Math.PI),
+
+        /* Magnetization
+           1 A/m = 10^-3 emu/cm³
+        */
+        "Magnetization — A/m": 1,
+        "Magnetization — emu/cm³": 1000,
+
+        /* Magnetic polarization
+           Standard B conversion:
+           1 T = 10^4 G
+        */
+        "Magnetic Polarization — T": 1,
+        "Magnetic Polarization — G": 0.0001,
+
+        /* Magnetic moment
+           1 A m² = 10^3 emu
+        */
+        "Magnetic Moment — A·m²": 1,
+        "Magnetic Moment — emu": 0.001,
+
+        /* Magnetic moment per unit mass
+           1 A m²/kg = 1 emu/g
+        */
+        "Magnetic Moment per Unit Mass — A·m²/kg": 1,
+        "Magnetic Moment per Unit Mass — emu/g": 1,
+
+        /* Volume magnetic susceptibility
+           1(SI) = 1/(4π) CGS
+        */
+        "Volume Magnetic Susceptibility — SI": 1,
+        "Volume Magnetic Susceptibility — CGS": 1 / (4 * Math.PI),
+
+        /* Mass magnetic susceptibility
+           1 m³/kg = 10³/(4π) emu Oe⁻¹ g⁻¹
+        */
+        "Mass Magnetic Susceptibility — m³/kg": 1,
+        "Mass Magnetic Susceptibility — emu Oe⁻¹ g⁻¹":
+            1000 / (4 * Math.PI),
+
+        /* Molar magnetic susceptibility
+           1 m³/mol = 10^6/(4π) emu Oe⁻¹ g⁻¹ mol⁻¹
+        */
+        "Molar Magnetic Susceptibility — m³/mol": 1,
+        "Molar Magnetic Susceptibility — emu Oe⁻¹ g⁻¹ mol⁻¹":
+            1000000 / (4 * Math.PI),
+
+        /* Magnetic permeability
+           1 H/m = 10^7/(4π) G Oe⁻¹
+        */
+        "Magnetic Permeability — H/m": 1,
+        "Magnetic Permeability — G/Oe":
+            10000000 / (4 * Math.PI),
+
+        /* Magnetic flux
+           1 Wb = 10^8 Mx
+        */
+        "Magnetic Flux — Weber (Wb)": 1,
+        "Magnetic Flux — Maxwell (Mx)": 0.00000001,
+
+        /* Magnetic scalar potential / magnetomotive force
+           1 A = 4π/10 gilbert
+        */
+        "Magnetic Scalar Potential — A": 1,
+        "Magnetic Scalar Potential — gilbert":
+            4 * Math.PI / 10,
+
+        /* Magnetic vector potential
+           1 Wb/m = 10^6 emu
+        */
+        "Magnetic Vector Potential — Wb/m": 1,
+        "Magnetic Vector Potential — emu": 0.000001,
+
+        /* Magnetic pole strength
+           1 A·m = 10 emu
+        */
+        "Magnetic Pole Strength — A·m": 1,
+        "Magnetic Pole Strength — emu": 0.1,
+
+        /* Dimensionless quantities
+           SI = CGS
+        */
+        "Demagnetizing Factor — SI": 1,
+        "Demagnetizing Factor — CGS": 1,
+
+        "Magnetostriction Constant — SI": 1,
+        "Magnetostriction Constant — CGS": 1,
+
+        /* Anisotropy constant
+           1 J/m³ = 10 erg/cm³
+        */
+        "Anisotropy Constant — J/m³": 1,
+        "Anisotropy Constant — erg/cm³": 0.1,
+
+        /* Magnetostatic energy
+           1 J/m³ = 10 erg/cm³
+        */
+        "Magnetostatic Energy — J/m³": 1,
+        "Magnetostatic Energy — erg/cm³": 0.1,
+
+        /* Energy product
+           1 J/m³ = 10 erg/cm³
+        */
+        "Energy Product — J/m³": 1,
+        "Energy Product — erg/cm³": 0.1
     }
 
 };
 
+
+/* =====================================
+   LOAD UNITS
+   ===================================== */
+
 function loadUnits() {
 
-    const category = document.getElementById("category").value;
+    const category =
+        document.getElementById("category").value;
 
-    const from = document.getElementById("fromUnit");
-    const to = document.getElementById("toUnit");
+    const from =
+        document.getElementById("fromUnit");
+
+    const to =
+        document.getElementById("toUnit");
 
     from.innerHTML = "";
     to.innerHTML = "";
@@ -235,18 +385,26 @@ function loadUnits() {
     }
 
     if (!units[category]) {
-    return;
+        return;
+    }
+
+    Object.keys(units[category]).forEach(function(unit) {
+
+        addOption(from, unit);
+        addOption(to, unit);
+
+    });
 }
 
-Object.keys(units[category]).forEach(function(unit) {
-    addOption(from, unit);
-    addOption(to, unit);
-});
-}
+
+/* =====================================
+   ADD OPTION
+   ===================================== */
 
 function addOption(select, text) {
 
-    const option = document.createElement("option");
+    const option =
+        document.createElement("option");
 
     option.value = text;
     option.textContent = text;
@@ -254,64 +412,152 @@ function addOption(select, text) {
     select.appendChild(option);
 }
 
+
+/* =====================================
+   CONVERT
+   ===================================== */
+
 function convert() {
 
-    const category = document.getElementById("category").value;
+    const category =
+        document.getElementById("category").value;
 
-    const value = parseFloat(
-        document.getElementById("value").value
-    );
+    const value =
+        parseFloat(
+            document.getElementById("value").value
+        );
 
-    const from = document.getElementById("fromUnit").value;
-    const to = document.getElementById("toUnit").value;
+    const from =
+        document.getElementById("fromUnit").value;
+
+    const to =
+        document.getElementById("toUnit").value;
+
+    const resultBox =
+        document.getElementById("result");
+
+
+    if (category === "") {
+
+        resultBox.innerHTML =
+            "Please select a category.";
+
+        return;
+    }
+
 
     if (isNaN(value)) {
 
-        document.getElementById("result").innerHTML =
+        resultBox.innerHTML =
             "Please enter a value.";
 
         return;
     }
 
+
     let result;
+
+
+    /* ==============================
+       TEMPERATURE
+       ============================== */
 
     if (category === "temperature") {
 
         let celsius;
 
+
         if (from === "Celsius") {
+
             celsius = value;
+
         }
 
         else if (from === "Fahrenheit") {
-            celsius = (value - 32) * 5 / 9;
+
+            celsius =
+                (value - 32) * 5 / 9;
+
         }
 
         else if (from === "Kelvin") {
-            celsius = value - 273.15;
+
+            celsius =
+                value - 273.15;
+
         }
 
+
         if (to === "Celsius") {
+
             result = celsius;
+
         }
 
         else if (to === "Fahrenheit") {
-            result = (celsius * 9 / 5) + 32;
+
+            result =
+                (celsius * 9 / 5) + 32;
+
         }
 
         else if (to === "Kelvin") {
-            result = celsius + 273.15;
+
+            result =
+                celsius + 273.15;
+
         }
 
-    } else {
-
-        const baseValue = value * units[category][from];
-
-        result = baseValue / units[category][to];
     }
 
-    document.getElementById("result").innerHTML =
-        "Result = " + result;
+
+    /* ==============================
+       ALL OTHER CATEGORIES
+       ============================== */
+
+    else {
+
+        const baseValue =
+            value * units[category][from];
+
+        result =
+            baseValue / units[category][to];
+
+    }
+
+
+    /* ==============================
+       DISPLAY RESULT
+       ============================== */
+
+    resultBox.innerHTML =
+        "Result = " + formatResult(result);
+
+}
+
+
+/* =====================================
+   RESULT FORMATTING
+   ===================================== */
+
+function formatResult(number) {
+
+    if (!isFinite(number)) {
+        return "Error";
+    }
+
+    if (number === 0) {
+        return "0";
+    }
+
+    if (
+        Math.abs(number) >= 0.000001 &&
+        Math.abs(number) < 1000000000
+    ) {
+        return Number(number.toFixed(10));
+    }
+
+    return number.toExponential(6);
 }
 
 </script>
