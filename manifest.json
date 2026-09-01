@@ -1,6 +1,6 @@
 {
-  "name": "Physics Unit Converter",
-  "short_name": "Physics Converter",
+  "name": "PC Physics Unit Converter",
+"short_name": "PC Physics",
   "description": "Offline Physics Unit Converter",
   "start_url": "./",
   "display": "standalone",
